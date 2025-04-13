@@ -1,0 +1,95 @@
+### deepspeed
+# deepspeed: ds_configs/ZeRO2.json
+# deepspeed: ds_configs/ZeRO0.json
+
+### model
+model_name_or_path: /hub/huggingface/models/Qwen/Qwen2.5-7B-Instruct
+print_param_status: true
+resume_from_checkpoint: false
+
+### method
+stage: sft_custom
+do_train: true
+do_predict: false
+finetuning_type: lora
+lora_target: q_proj,v_proj,k_proj,o_proj
+lora_rank: 8
+lora_alpha: 32
+lora_dropout: 0.1
+flash_attn: fa2
+additional_target: head_feat,head_align,graph_learner
+
+### custom
+first_train: true
+recursive_dag_search: false
+training_stage: 2
+num_classes: 5
+num_feature_nodes: 37
+feature_subset: null
+alignment_type: additive
+x_dim: 1
+z_dim: 1
+graph_threshold: 0.3
+tau_A: 0.0
+lambda_A: 0.0
+c_A: 1.0
+encoder_hidden_size: 128
+decoder_hidden_size: 128
+h_tol: 0.00000001
+gamma: 1.0
+cls_lambda: 1.0
+align_lambda: 1.0
+elbo_lambda: 1.0
+rec_lambda: 1.0
+feature_name_path: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/feature_name_mapping.json
+forbidden_edges_filepath: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/forbidden_edges.csv
+positive_required_edges_filepath: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/positive_required_edges.csv
+negative_required_edges_filepath: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/negative_required_edges.csv
+
+### dataset
+dataset: causal_train
+dataset_dir: data
+template: qwen
+cutoff_len: 1024
+# max_samples: 30000
+overwrite_cache: true
+preprocessing_num_workers: 16
+tokenized_path: tkd_data/causal
+
+### output
+output_dir: saves/qwen2.5-7b/gl-demo
+logging_steps: 1
+# save_steps: 100
+save_steps: 2
+plot_loss: true
+overwrite_output_dir: true
+
+### train
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 4
+optim: adamw_torch
+learning_rate: 0.0005
+num_train_epochs: 1
+max_steps: 3
+lr_scheduler_type: cosine
+# warmup_ratio: 0.1
+warmup_steps: 1
+bf16: true
+ddp_timeout: 180000000
+max_grad_norm: 1.0
+neftune_noise_alpha: 0
+label_names: ['labels']
+
+### eval
+# val_size: 0.1
+eval_dataset: causal_test
+per_device_eval_batch_size: 16
+eval_strategy: steps
+# eval_steps: 100
+eval_steps: 2
+batch_eval_metrics: true
+prediction_loss_only: false
+save_total_limit: 5
+load_best_model_at_end: true
+metric_for_best_model: eval_causal_test_loss
+greater_is_better: false

@@ -1,0 +1,52 @@
+##################################################
+# install your miniconda
+
+# conda create -n acc python=3.10
+# conda activate acc
+
+# pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu124
+# cd your_path_to_LLaMA-Factory
+# pip install -e ".[torch,metrics]"
+##################################################
+transformers>=4.41.2,<=4.50.0,!=4.46.*,!=4.47.*,!=4.48.*;python_version<'3.10' and sys_platform != 'darwin'
+transformers>=4.41.2,<=4.50.0,!=4.46.*,!=4.47.*,!=4.48.0;python_version>='3.10' and sys_platform != 'darwin'
+transformers>=4.41.2,<=4.49.0,!=4.46.*,!=4.47.*,!=4.48.*;sys_platform == 'darwin'
+datasets>=2.16.0,<=3.4.1
+accelerate>=0.34.0,<=1.5.2
+peft>=0.14.0,<=0.15.0
+trl>=0.8.6,<=0.9.6
+tokenizers>=0.19.0,<=0.21.0
+gradio>=4.38.0,<=5.21.0
+pandas>=2.0.0
+scipy
+einops
+sentencepiece
+tiktoken
+protobuf
+uvicorn
+pydantic
+fastapi
+sse-starlette
+matplotlib>=3.7.0
+fire
+packaging
+pyyaml
+numpy<2.0.0
+pydantic<=2.10.6
+av
+librosa
+tyro<0.9.0
+deepspeed
+ipykernel
+flash-attn
+igraph
+ujson
+tensorboard
+openai
+nltk
+seaborn
+lingam
+causal-learn
+graphviz
+setproctitle
+vllm==0.7.2
