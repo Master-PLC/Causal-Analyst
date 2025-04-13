@@ -3,7 +3,7 @@
 gpus=0,1,5
 num_processes=$(echo $gpus | tr "," "\n" | wc -l)
 
-local_dir="/hub/huggingface/models/Llama"
+local_dir="./ckpts/Llama"
 model_name="LLaMA-3.1-8B-Instruct"
 
 eval_dir="./eval_results"

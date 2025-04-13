@@ -3,7 +3,7 @@
 gpus=0,1,5
 num_processes=$(echo $gpus | tr "," "\n" | wc -l)
 
-local_dir="/hub/huggingface/models/GLM"
+local_dir="./ckpts/GLM"
 model_name="GLM4-9B-Chat"
 
 eval_dir="./eval_results"

@@ -3,7 +3,7 @@
 gpus=0,1,5
 num_processes=$(echo $gpus | tr "," "\n" | wc -l)
 
-local_dir="/hub/huggingface/models/Qwen"
+local_dir="./ckpts/Qwen"
 model_name="Qwen-72B-Chat"
 
 eval_dir="./eval_results"
