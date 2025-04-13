@@ -1,15 +1,14 @@
 #!/bin/bash
 
-gpus=1,2,3,6,7
+gpus=0,1,2,3,4
 num_processes=$(echo $gpus | tr "," "\n" | wc -l)
 
 
 modify_yaml() {
     local yaml_path="$1"
     local save_path="$2"
-    shift 2  # 移除前两个参数，剩下的参数是字段更新
+    shift 2
 
-    # 构建字段更新参数
     local fields=()
     for field in "$@"; do
         fields+=("$field")
@@ -40,7 +39,7 @@ cls_export_name="cls"
 gl_export_name="gl"
 all_export_name="all"
 
-model_name_or_path=/hub/huggingface/models/Qwen/Qwen2.5-7B-Instruct
+model_name_or_path=./ckpts/Qwen2.5-7B-Instruct
 
 re_tokenize=0
 if [ "$re_tokenize" -eq 1 ]; then
@@ -52,10 +51,6 @@ if [ "$re_tokenize" -eq 1 ]; then
         src/train.py "$config_dir/$cls_yaml_name.yaml"
 fi
 
-# cls_skip_cycles=(1 2 3 4 5 6 7 8 9 10)
-# gl_skip_cycles=(1 2 3 4 5 6 7 8 9 10)
-# comb_skip_cycles=(1 2 3 4 5 6 7 8 9 10)
-# eval_skip_cycles=(1)
 cls_skip_cycles=()
 gl_skip_cycles=()
 comb_skip_cycles=()
@@ -278,41 +273,6 @@ for i in $(seq 1 $train_cycle); do
     fi
     model_name_or_path="$all_export_dir"
 
-
-
-    # echo "Evaluating classifier and graph learner"
-    # START=$(date +%s.%N)
-    # result_save_dir="$save_dir/$eval_save_name-cyc$i"
-    # mkdir -p "$result_save_dir"
-
-    # # if cycle i in eval_skip_cycles, skip training
-    # if [[ " ${eval_skip_cycles[@]} " =~ " $i " ]]; then
-    #     echo "Skipping evaluation for cycle $i"
-
-    # else
-    #     modify_yaml "$config_dir/$cls_yaml_name.yaml" "$result_save_dir/$eval_yaml_name.yaml" \
-    #         "do_train=false" \
-    #         "do_predict=true" \
-    #         "model_name_or_path=$model_name_or_path" \
-    #         "first_train=false" \
-    #         "training_stage=3" \
-    #         "additional_target=head_cls,head_feat,head_align,graph_learner" \
-    #         "output_dir=$result_save_dir" \
-    #         "rec_lambda=$rec_lambda" \
-    #         "learning_rate=$lr_comb" \
-    #         2>&1 | tee "$result_save_dir/output.log"
-
-    #     first_gpu=$(echo $gpus | cut -d ',' -f 1)
-    #     CUDA_VISIBLE_DEVICES=$first_gpu accelerate launch \
-    #         --mixed_precision no --num_processes 1 \
-    #         src/train.py "$result_save_dir/$eval_yaml_name.yaml" \
-    #         2>&1 | tee -a "$result_save_dir/output.log"
-    # fi
-    # END=$(date +%s.%N)
-    # DUR=$(echo "$END - $START" | bc)
-    # echo "Evaluation time: $DUR seconds"
-
-
     CYC_END=$(date +%s.%N)
     CYC_DUR=$(echo "$CYC_END - $CYC_START" | bc)
     echo "Training cycle $i done in $CYC_DUR seconds"
@@ -323,37 +283,6 @@ TRAIN_DUR=$(echo "$TRAIN_END - $TRAIN_START" | bc)
 echo "Training done in $TRAIN_DUR seconds"
 
 
-
-
-# first_gpu=$(echo $gpus | cut -d ',' -f 1)
-# num_processes=1
-
-# eval_yaml_name="qwen2.5-7b-lora-eval"
-# eval_save_name=eval
-
-# echo "Evaluating classifier and graph learner"
-# START=$(date +%s.%N)
-# result_save_dir="$save_dir/$eval_save_name-cyc$train_cycle"
-# mkdir -p "$result_save_dir"
-
-# modify_yaml "$config_dir/$cls_yaml_name.yaml" "$result_save_dir/$eval_yaml_name.yaml" \
-#     "do_train=false" \
-#     "do_predict=true" \
-#     "model_name_or_path=$model_name_or_path" \
-#     "first_train=false" \
-#     "training_stage=3" \
-#     "additional_targets=head_cls,head_feat,head_align,graph_learner" \
-#     "output_dir=$result_save_dir" \
-#     "rec_lambda=$rec_lambda" \
-#     2>&1 | tee "$result_save_dir/output.log"
-
-# CUDA_VISIBLE_DEVICES=$first_gpu accelerate launch \
-#     --mixed_precision no --num_processes $num_processes \
-#     src/train.py "$result_save_dir/$eval_yaml_name.yaml" \
-#     2>&1 | tee -a "$result_save_dir/output.log"
-# END=$(date +%s.%N)
-# DUR=$(echo "$END - $START" | bc)
-# echo "Evaluation time: $DUR seconds"
 
 
 wait

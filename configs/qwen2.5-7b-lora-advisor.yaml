@@ -3,7 +3,7 @@
 # deepspeed: ds_configs/ZeRO0.json
 
 ### model
-model_name_or_path: /hub/huggingface/models/Qwen/Qwen2.5-7B-Instruct
+model_name_or_path: ./ckpts/Qwen2.5-7B-Instruct
 print_param_status: false
 resume_from_checkpoint: false
 

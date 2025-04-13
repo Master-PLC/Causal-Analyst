@@ -124,7 +124,6 @@ def run_sft_custom(
                 keys += [
                     "eval_causal_test_loss_nll", "eval_causal_test_loss_kl", "eval_causal_test_loss_elbo",
                     "eval_causal_test_loss_sparse", "eval_causal_test_loss_lagr", "eval_causal_test_loss_mse",
-                    # "eval_causal_test_loss_connect", "eval_causal_test_loss_positive", 
                     "eval_causal_test_loss_graph", "eval_causal_test_loss_align",
                 ]
             elif custom_args.training_stage == 3:
@@ -133,10 +132,11 @@ def run_sft_custom(
                     "eval_causal_test_precision", "eval_causal_test_recall", "eval_causal_test_f1",
                     "eval_causal_test_loss_nll", "eval_causal_test_loss_kl", "eval_causal_test_loss_elbo",
                     "eval_causal_test_loss_sparse", "eval_causal_test_loss_lagr", "eval_causal_test_loss_mse",
-                    # "eval_causal_test_loss_connect", "eval_causal_test_loss_positive", 
                     "eval_causal_test_loss_graph", "eval_causal_test_loss_align",
                 ]
 
+            if training_args.do_predict:
+                keys = [k.replace("causal_test_", "") for k in keys]
             plot_loss(training_args.output_dir, keys=keys)
 
     # Evaluation
@@ -149,34 +149,6 @@ def run_sft_custom(
             graphs = model.get_causal_graph()
             with open(os.path.join(training_args.output_dir, "graph.pkl"), "wb") as f:
                 pkl.dump(graphs, f)
-
-            # Create binary adjacency matrix using config threshold
-            # matG1 = np.matrix(graph)
-            # final_df = pd.DataFrame(matG1, index=custom_args.feature_names, columns=custom_args.feature_names)
-
-            # Save final binary adjacency matrix
-            # final_df.to_csv(os.path.join(training_args.output_dir, "final_adjacency_matrix.csv"), index=True)
-
-            # # Draw the DAG
-            # final_DAG = from_numpy_array(final_df.to_numpy(), create_using=nx.DiGraph)
-            # final_DAG = nx.relabel_nodes(
-            #     final_DAG, dict(zip(list(range(custom_args.num_feature_nodes)), custom_args.feature_names))
-            # )
-            # final_DAG.remove_nodes_from(list(nx.isolates(final_DAG)))
-
-            # nx.draw(
-            #     final_DAG,
-            #     node_color="lightcoral",
-            #     node_size=75,
-            #     font_size=3,
-            #     width=0.5,
-            #     arrowsize=4,
-            #     with_labels=True,
-            #     pos=nx.spring_layout(final_DAG),
-            # )
-            # plt.draw()
-            # plt.savefig(os.path.expanduser(os.path.join(training_args.output_dir, "DAG_plot.png")), format="PNG", dpi=500)
-            # plt.close()
 
     # Predict
     if training_args.do_predict and custom_args.training_stage in [1, 3]:

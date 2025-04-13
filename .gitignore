@@ -172,3 +172,20 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+saves/
+
+data/advisor_test.json
+data/advisor_train.json
+
+data/enhancer_test.json
+data/enhancer_train.json
+
+data/jailbreak_raw.json
+data/jailbreak_enhanced.json
+
+data/huanhuan.json
+data/qwen_train.json
+
+foo*

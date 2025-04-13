@@ -1,7 +1,7 @@
 ### Note: DO NOT use quantized model or quantization_bit when merging lora adapters
 
 ### model
-model_name_or_path: /hub/huggingface/models/Qwen/Qwen2.5-7B-Instruct
+model_name_or_path: ./ckpts/Qwen2.5-7B-Instruct
 adapter_name_or_path: saves/qwen2.5-7b/cls
 template: qwen
 finetuning_type: lora
@@ -33,7 +33,7 @@ cls_lambda: 1.0
 align_lambda: 1.0
 elbo_lambda: 1.0
 rec_lambda: 1.0
-feature_name_path: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/feature_name_mapping.json
-forbidden_edges_filepath: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/forbidden_edges.csv
-positive_required_edges_filepath: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/positive_required_edges.csv
-negative_required_edges_filepath: /data/home/Licheng/workspace/LLaMA-Factory/prior_knowledge/negative_required_edges.csv
+feature_name_path: ./prior_knowledge/feature_name_mapping.json
+forbidden_edges_filepath: ./prior_knowledge/forbidden_edges.csv
+positive_required_edges_filepath: ./prior_knowledge/positive_required_edges.csv
+negative_required_edges_filepath: ./prior_knowledge/negative_required_edges.csv
