@@ -10,4 +10,4 @@ Our work is based on the [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factor
 
 
 # Notice
-Our complete dataset will be made publicly available after our paper is accepted.
+The complete dataset used in this work is currently an internal testing dataset from the Alibaba team. At this moment, we do not have immediate plans to make it publicly available, due to internal data governance, compliance, and safety review requirements. We fully understand the community's interest in the data and will update this notice if there are any changes. Thank you for your understanding.
